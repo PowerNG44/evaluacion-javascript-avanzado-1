@@ -6,9 +6,12 @@
   Ejemplo de llamada a la función:
   console.log(sumaRecursiva(5)); // Debería imprimir 15 (1 + 2 + 3 + 4 + 5)
 */
-function sumaRecursiva() {
+function sumaRecursiva(n) {
+  if (n === 1){
+    return 1;
+  }
   // Tu código aca:
-}
+
 
 /* Ejercicio N°2: Parientes Simpsons
 
@@ -36,6 +39,24 @@ Ejemplo:
   */
 
 function isAncestor(genealogyTree, ancestor, descendant) {
+  if (genealogyTree.hasOwnProperty(ancestor)) {
+    return false;
+  }
+
+ 
+  const descendants = genealogyTree[ancestor];
+
+ 
+  if (descendants.includes(descendant)) {
+    return true;
+  }
+
+ 
+  for (const child of descendants) {
+    if (isAncestor(genealogyTree, child, descendant)) {
+      return true;
+    }
+  }
   // Tu código aca:
 }
 
@@ -62,6 +83,14 @@ la LinkedList. En el caso de que la lista se encuentre vacía deberá retornar c
  */
 
 linkedList.prototype.size = function () {
+  let count = 0;
+  let current = this.head;
+  while (current !== null) {
+    count++;
+    current = current.next;
+  }
+  return count;
+  
   // Tu código aca:
 };
 
@@ -85,6 +114,75 @@ linkedList.prototype.size = function () {
     Suponiendo que se pide una posición inválida: removeFromPos(8) --> false */
 
 linkedList.prototype.switchPos = function (pos1, pos2) {
+  function linkedList() {
+    this.head = null;
+    this.size = 0
+  }
+  function Node(value) {
+    this.value = value;
+    this.next = null;
+  }
+  LinkedList.prototype.add = function(value) {
+    let newNode = new Node(value);
+  
+    if (this.head === null) {
+      this.head = newNode;
+    } else {
+      let current = this.head;
+      while (current.next !== null) {
+        current = current.next;
+      }
+      current.next = newNode;
+    }
+  
+    this.size++;
+  };
+  LinkedList.prototype.switchPos = function(pos1, pos2) {
+    if (pos1 < 0 || pos2 < 0 || pos1 >= this.size || pos2 >= this.size) {
+      return false;
+    }
+  
+    if (pos1 === pos2) {
+      return true; 
+    }
+  
+    let current = this.head;
+    let prev = null;
+    let prev = null;
+    let node, node2;
+  
+    for (let i = 0; i < pos1; i++) {
+      prev = current;
+      current = current.next;
+    }
+    node = current;
+  
+    current = this.head;
+    for (let i = 0; i < pos2; i++) {
+      prev = current;
+      current = current.next;
+    }
+    node2 = current;
+  
+    if (prev == null) {
+      prev.next = node2;
+    } else {
+      this.head = node2;
+    }
+  
+    if (prev == null) {
+      prev.next = node1;
+    } else {
+      this.head = node1;
+    }
+  
+    let tempNext = node1.next;
+    node.next = node2.next;
+    node.next = tempNext;
+  
+    return true;
+  };
+
   // Tu código aca:
 };
 
@@ -125,26 +223,33 @@ console.log(consultorio.cantidadPacientes()); // Debería devolver 2
 
 class ConsultorioMedico {
   constructor() {
+    this.colaEspera;
     // Tu código aca:
   }
 
   // Agrega un paciente al final de la cola.
-  agregarPaciente(nombre) {
+  agregarPaciente(paciente) {
+    this.colaEspera.push(paciente)
     // Tu código aca:
   }
 
   // Atiende al siguiente paciente y lo elimina de la cola.
   siguientePaciente() {
+    if (this.colaEspera.length == 0) {
+      return "No hay paciente";
+    }
     // Tu código aca:
   }
 
   // Devuelve la cantidad de pacientes en espera.
   cantidadPacientes() {
+    return this.colaEspera.length;
     // Tu código aca:
   }
 
   // Devuelve un arreglo con los nombres de los pacientes en espera.
   listaPacientes() {
+    return this.colaEspera;
     // Tu código aca:
   }
 }
@@ -187,6 +292,34 @@ class ConsultorioMedico {
  */
 
 function cardGame(playerOneCards, playerTwoCards) {
+  let player1CastleHealth = 100;
+  let player2CastleHealth = 100;
+
+  while (player1Deck.length > 0 player2Deck.length > 0) {
+    
+    const player1AttackCard = player1Deck.shift();
+    const player1DefenseCard = player1Deck.shift();
+    const player2AttackCard = player2Deck.shift();
+    const player2DefenseCard = player2Deck.shift();
+
+    
+    const player1Damage = Math.max(0, player1AttackCard.attack - player2DefenseCard.defense);
+    player2CastleHealth -= player1Damage;
+
+    
+    const player2Damage = Math.max(0, player2AttackCard.attack - player1DefenseCard.defense);
+    player1CastleHealth -= player2Damage;
+  }
+
+ 
+  if (player1CastleHealth > player2CastleHealth) {
+    return 'PLAYER ONE';
+  } else if (player2CastleHealth > player1CastleHealth) {
+    return 'PLAYER TWO';
+  } else {
+    return 'TIE';
+  }
+}
   // Tu código aca:
 }
 
@@ -213,9 +346,23 @@ function binarySearchTree(value) {
   this.right = null;
 }
 
-binarySearchTree.prototype.height = function () {
-  // Tu código aca:
+binarySearchTree.prototype.height = function (value) {
+  if (value <= this.value) {
+    if (this.left === null) {
+      this.left = new BinarySearchTree(value);
+    } else {
+      this.left.insert(value);
+    }
+  } else {
+    if (this.right === null) {
+      this.right = new BinarySearchTree(value);
+    } else {
+      this.right.insert(value);
+    }
+  }
 };
+  // Tu código aca:
+
 
 /* Ejercicio N°8: Sistema de Pedidos en McDonald's
  
@@ -254,15 +401,27 @@ El árbol debería tener la siguiente estructura, donde cada nodo representa un 
 
 class SistemaPedidosMcDonalds {
   constructor() {
+    this.raiz = null;
     // Tu código aca:
   }
+}
 
   agregarPedido(numeroOrden, productos) {
+    const nuevoPedido = new Pedido(numeroOrden, productos);
+    if (this.raiz === null) {
+      this.raiz = nuevoPedido;
+    } else {
+      this.insertarEnArbol(this.raiz, nuevoPedido);
+    }
+  }
     // Tu código aca:
+  
+
+  obtenerNumerosDeOrden() {
+
+
   }
 
-  obtenerNumerosDeOrden(){}
-}
 
 // ---------- ALGORITMOS -----------
 
@@ -299,6 +458,27 @@ debe retornar :
 */
 
 function ordenarPeliculas(peliculas) {
+  if (peliculas.length <= 1) {
+    return peliculas;
+  }
+
+  const pivote = peliculas[0];
+  const menores = [];
+  const mayores = [];
+
+  for (let i = 1; i < peliculas.length; i++) {
+    if (peliculas[i].calificacion < pivote.calificacion) {
+      menores.push(peliculas[i]);
+    } else {
+      mayores.push(peliculas[i]);
+    }
+  }
+
+  const peliculasOrdenadasMenores = ordenarPeliculas(menores);
+  const peliculasOrdenadasMayores = ordenarPeliculas(mayores);
+
+  return peliculasOrdenadasMenores.concat(pivote, peliculasOrdenadasMayores);
+}
   // Tu código aca:
 }
 
